@@ -5,16 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -26,17 +25,21 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (res.ok) {
-        // Admin ise admin paneline, değilse anasayfaya
+        // Kullanıcı bilgisini sakla (Navbar için)
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        toast.success(`Hoşgeldiniz, ${data.user.name}!`);
+        
         if (data.user.role === 'ADMIN') {
            router.push('/admin');
         } else {
            router.push('/');
         }
       } else {
-        setError(data.error || 'Giriş başarısız.');
+        toast.error(data.error || 'Giriş başarısız.');
       }
     } catch (err) {
-      setError('Bir hata oluştu.');
+      toast.error('Bir hata oluştu.');
     }
   };
 
@@ -44,10 +47,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       <Navbar />
       <div className="flex-grow flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+        <div className="max-w-md w-full bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-8">Giriş Yap</h2>
-          
-          {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-4 text-sm text-center">{error}</div>}
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -70,7 +71,7 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
             </div>
-            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">
+            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg shadow-blue-500/30">
               Giriş Yap
             </button>
           </form>

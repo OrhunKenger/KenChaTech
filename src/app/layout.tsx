@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import SplashScreen from "@/components/SplashScreen";
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +19,8 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={`${inter.className} antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100`}>
+        <SplashScreen />
+        <Toaster position="top-right" richColors />
         {children}
       </body>
     </html>

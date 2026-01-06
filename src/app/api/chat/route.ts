@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { prisma } from '@/lib/prisma';
 
 const apiKey = process.env.GEMINI_API_KEY;
@@ -14,18 +14,18 @@ const model = genAI.getGenerativeModel({
           name: "save_order",
           description: "Müşteri bir ürün satın almak istediğini beyan ettiğinde ve ismini verdiğinde bu fonksiyonu çağır. Siparişi kaydeder.",
           parameters: {
-            type: "OBJECT",
+            type: SchemaType.OBJECT,
             properties: {
               customerName: {
-                type: "STRING",
+                type: SchemaType.STRING,
                 description: "Müşterinin adı ve soyadı.",
               },
               productName: {
-                type: "STRING",
+                type: SchemaType.STRING,
                 description: "Müşterinin satın almak veya ilgilenmek istediği ürünün adı.",
               },
               note: {
-                type: "STRING",
+                type: SchemaType.STRING,
                 description: "Varsa müşterinin ek notu veya iletişim isteği.",
               }
             },

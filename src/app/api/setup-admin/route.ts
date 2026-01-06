@@ -1,41 +1,27 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const email = 'orhunkenger1929@gmail.com';
-    const password = 'Orhun123.';
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const targetEmail = 'orhunkenger1929@gmail.com';
 
-    const user = await prisma.user.upsert({
-      where: { email },
-      update: {
-        password: hashedPassword,
-        role: 'ADMIN',
-        name: 'Orhun Kenger'
-      },
-      create: {
-        email,
-        password: hashedPassword,
-        name: 'Orhun Kenger',
-        role: 'ADMIN',
-        phone: '05310140429'
-      },
+    const user = await prisma.user.update({
+      where: { email: targetEmail },
+      data: { role: 'ADMIN' }
     });
 
     return NextResponse.json({ 
       success: true, 
-      message: "Admin kullanıcısı başarıyla oluşturuldu.", 
-      email: user.email,
-      role: user.role 
+      message: `${targetEmail} kullanıcısı başarıyla ADMIN yapıldı. Şimdi panele girebilirsin.`,
+      user
     });
   } catch (error: any) {
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: `Kullanıcı bulunamadı. Önce ${'orhunkenger1929@gmail.com'} adresiyle kayıt olmalısın.`,
+      details: error.message
     }, { status: 500 });
   }
 }

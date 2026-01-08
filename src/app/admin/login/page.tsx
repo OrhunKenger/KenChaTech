@@ -8,11 +8,13 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -28,12 +30,15 @@ export default function AdminLoginPage() {
            router.push('/admin');
         } else {
            setError('Bu alana erişim yetkiniz yok.');
+           setLoading(false);
         }
       } else {
         setError('Giriş başarısız.');
+        setLoading(false);
       }
     } catch (err) {
       setError('Hata oluştu.');
+      setLoading(false);
     }
   };
 
@@ -70,8 +75,17 @@ export default function AdminLoginPage() {
               className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
           </div>
-          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">
-            GİRİŞ YAP
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center"
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                GİRİŞ YAPILIYOR...
+              </>
+            ) : 'GİRİŞ YAP'}
           </button>
         </form>
       </div>

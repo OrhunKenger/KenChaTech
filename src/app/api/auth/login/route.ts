@@ -5,13 +5,19 @@ import { SignJWT } from 'jose';
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    const { email: rawEmail, password } = await req.json();
+    
+    // Email normalizasyonu
+    const email = rawEmail?.trim().toLowerCase();
+    
+    console.log(`Login attempt for: ${email}`); // Debug log
 
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) {
+      console.log(`User not found: ${email}`);
       return NextResponse.json({ error: 'Kullanıcı bulunamadı' }, { status: 401 });
     }
 

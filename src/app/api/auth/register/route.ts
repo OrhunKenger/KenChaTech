@@ -4,7 +4,10 @@ import bcrypt from 'bcryptjs';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, phone, address } = await req.json();
+    const { name, email: rawEmail, password, phone, address } = await req.json();
+    
+    // Email normalizasyonu
+    const email = rawEmail?.trim().toLowerCase();
 
     // Basit Validasyonlar
     if (!email || !password || !name) {

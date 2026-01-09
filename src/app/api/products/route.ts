@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { supabase } from '@/lib/supabase';
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
 export async function GET() {
   try {
@@ -30,29 +31,13 @@ export async function POST(req: Request) {
 
     for (const file of files) {
       if (file.size > 0) {
-        const filename = `${Date.now()}-${file.name.replaceAll(' ', '_')}`;
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const filename = `${Date.now()}_${file.name.replaceAll(' ', '_')}`;
         
-        // Supabase Upload
-        const { data, error } = await supabase
-          .storage
-          .from('products')
-          .upload(filename, file, {
-            cacheControl: '3600',
-            upsert: false
-          });
-
-        if (error) {
-          console.error('Supabase upload error:', error);
-          continue;
-        }
-
-        // Public URL al
-        const { data: { publicUrl } } = supabase
-          .storage
-          .from('products')
-          .getPublicUrl(filename);
-          
-        imageUrls.push(publicUrl);
+        const uploadPath = path.join(process.cwd(), 'public/uploads', filename);
+        await writeFile(uploadPath, buffer);
+        
+        imageUrls.push(`/uploads/${filename}`);
       }
     }
 
@@ -113,20 +98,13 @@ export async function PUT(req: Request) {
     if (files.length > 0 && files[0].size > 0) {
         for (const file of files) {
           if (file.size > 0) {
-            const filename = `${Date.now()}-${file.name.replaceAll(' ', '_')}`;
+            const buffer = Buffer.from(await file.arrayBuffer());
+            const filename = `${Date.now()}_${file.name.replaceAll(' ', '_')}`;
             
-            const { data, error } = await supabase
-              .storage
-              .from('products')
-              .upload(filename, file);
-
-            if (!error) {
-              const { data: { publicUrl } } = supabase
-                .storage
-                .from('products')
-                .getPublicUrl(filename);
-              imageUrls.push(publicUrl);
-            }
+            const uploadPath = path.join(process.cwd(), 'public/uploads', filename);
+            await writeFile(uploadPath, buffer);
+            
+            imageUrls.push(`/uploads/${filename}`);
           }
         }
     }

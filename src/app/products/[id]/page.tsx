@@ -32,7 +32,24 @@ export default async function ProductDetailPage({ params }: ProductDetailProps) 
     }
   });
 
-  // ... (existing logic)
+  if (!product) {
+    notFound();
+  }
+
+  const features: string[] = product.features ? product.features.split(',').map((f: string) => f.trim()) : [];
+  
+  // Resimleri Parse Et
+  let images: string[] = [];
+  try {
+    const parsed = JSON.parse(product.images);
+    if (Array.isArray(parsed)) {
+      images = parsed;
+    } else {
+      images = [product.images];
+    }
+  } catch (e) {
+    images = [product.images];
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">

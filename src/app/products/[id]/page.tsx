@@ -1,7 +1,10 @@
 import Reviews from '@/components/Reviews';
 import { Star } from 'lucide-react';
+import { notFound } from 'next/navigation';
 
-// ... (existing imports)
+interface ProductDetailProps {
+  params: Promise<{ id: string }>;
+}
 
 export default async function ProductDetailPage({ params }: ProductDetailProps) {
   const { id } = await params;

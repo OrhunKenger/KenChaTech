@@ -1,6 +1,7 @@
 import Reviews from '@/components/Reviews';
 import { Star } from 'lucide-react';
 import { notFound } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 
 interface ProductDetailProps {
   params: Promise<{ id: string }>;

@@ -58,8 +58,10 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (res.ok) {
-        alert('Kayıt başarılı! Giriş yapabilirsiniz.');
-        router.push('/login');
+        // Otomatik giriş başarılı
+        localStorage.setItem('user', JSON.stringify(data.user));
+        // Sayfayı yenile ve anasayfaya git
+        window.location.href = '/'; 
       } else {
         setError(data.error || 'Kayıt başarısız.');
       }
@@ -83,6 +85,7 @@ export default function RegisterPage() {
               <input 
                 type="text" 
                 name="name"
+                autoComplete="name"
                 required 
                 value={formData.name}
                 onChange={handleChange}
@@ -96,6 +99,7 @@ export default function RegisterPage() {
                   <input 
                     type="email" 
                     name="email"
+                    autoComplete="email"
                     required 
                     value={formData.email}
                     onChange={handleChange}
@@ -107,6 +111,7 @@ export default function RegisterPage() {
                   <input 
                     type="tel" 
                     name="phone"
+                    autoComplete="tel"
                     required 
                     value={formData.phone}
                     onChange={handleChange}
@@ -120,6 +125,7 @@ export default function RegisterPage() {
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Adres</label>
               <textarea 
                 name="address"
+                autoComplete="street-address"
                 required 
                 value={formData.address}
                 onChange={handleChange}
@@ -134,6 +140,7 @@ export default function RegisterPage() {
                   <input 
                     type="password" 
                     name="password"
+                    autoComplete="new-password"
                     required 
                     value={formData.password}
                     onChange={handleChange}
@@ -145,6 +152,7 @@ export default function RegisterPage() {
                   <input 
                     type="password" 
                     name="confirmPassword"
+                    autoComplete="new-password"
                     required 
                     value={formData.confirmPassword}
                     onChange={handleChange}
@@ -154,7 +162,7 @@ export default function RegisterPage() {
             </div>
             
             <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors mt-4">
-              Kayıt Ol
+              Kayıt Ol & Giriş Yap
             </button>
           </form>
           

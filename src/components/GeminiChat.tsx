@@ -122,9 +122,18 @@ export default function GeminiChat() {
         className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center relative group"
       >
         <Bot className="w-6 h-6" />
-        <span className="absolute right-full mr-3 bg-slate-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          AI Asistan
-        </span>
+        
+        {/* Tooltip / Bubble */}
+        {!isOpen && (
+           <div className="absolute bottom-full mb-3 right-0 w-48 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs p-3 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 animate-bounce">
+              <div className="relative">
+                 <p className="font-semibold mb-1">Ken Size Yardımcı Olsun!</p>
+                 <p className="text-[10px] opacity-80">Sipariş ve şikayet kaydı için tıklayın.</p>
+                 <div className="absolute -bottom-[18px] right-4 w-4 h-4 bg-white dark:bg-slate-800 transform rotate-45 border-r border-b border-slate-200 dark:border-slate-700"></div>
+              </div>
+           </div>
+        )}
+
       </button>
     </div>
   );

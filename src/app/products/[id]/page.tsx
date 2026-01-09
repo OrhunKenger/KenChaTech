@@ -2,6 +2,13 @@ import Reviews from '@/components/Reviews';
 import { Star } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import WhatsappButton from '@/components/WhatsappButton';
+import GeminiChat from '@/components/GeminiChat';
+import ProductGallery from '@/components/ProductGallery';
+import Link from 'next/link';
+import { ArrowLeft, Check, ShieldCheck, Truck } from 'lucide-react';
 
 interface ProductDetailProps {
   params: Promise<{ id: string }>;
